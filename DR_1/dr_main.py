@@ -95,19 +95,28 @@ class LitModel(pl.LightningModule):
         loss = F.smooth_l1_loss(y_hat, y)
         result = pl.TrainResult(loss)
         # print(loss)
-        # result.log('train_loss', loss, on_step=False, on_epoch=False, prog_bar=False, logger=False)
+        result.log('train_loss', loss)
         return result
 
     def configure_optimizers(self):
         return torch.optim.Adam(self.parameters(), lr=learning_rate)
 
+    def validation_step(self, batch, batch_idx):
+        x, y = batch
+        y_hat = self(x)
+        eye = torch.eye(5).cuda()
+        y = eye[y]
+        loss = F.smooth_l1_loss(y_hat, y)
+        result = pl.EvalResult(loss)
+        result.log('val_loss', loss)
+        return result
 
 
-trainer = pl.Trainer(gpus=1)
+trainer = pl.Trainer(gpus=1, limit_test_batches=1.0)
 model = LitModel()
 
 kfold = KFold(5, True, 1)
-fold_count=0
+fold_count = 0
 torch.save(model.state_dict(), 'init.pt')
 for fold, (train_index, val_index) in enumerate(kfold.split(training_set)):
     fold_count += 1
@@ -118,5 +127,8 @@ for fold, (train_index, val_index) in enumerate(kfold.split(training_set)):
     train_loader = torch.utils.data.DataLoader(training_set,
                                                sampler=train_sampler,
                                                batch_size=batch_size)
+    val_loader = torch.utils.data.DataLoader(training_set,
+                                             sampler=valid_sampler,
+                                             batch_size=batch_size)
 
-    trainer.fit(model, train_loader)
+    trainer.fit(model, train_loader, val_loader)
