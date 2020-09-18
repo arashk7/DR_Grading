@@ -44,7 +44,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../noder" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunManager">
@@ -92,6 +92,7 @@
       <workItem from="1600135007640" duration="1639000" />
       <workItem from="1600137212021" duration="25000" />
       <workItem from="1600221483621" duration="511000" />
+      <workItem from="1600236290373" duration="2756000" />
     </task>
     <servers />
   </component>
@@ -119,26 +120,26 @@
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="93" y="93" width="1862" height="926" key="DiffContextDialog/0.0.2048.1112@0.0.2048.1112" timestamp="1600136647062" />
-    <state x="805" y="311" key="FileChooserDialogImpl" timestamp="1599804877753">
+    <state x="805" y="311" key="FileChooserDialogImpl" timestamp="1600237357851">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state x="805" y="311" key="FileChooserDialogImpl/0.0.2048.1112@0.0.2048.1112" timestamp="1599804877753" />
-    <state width="2005" height="305" key="GridCell.Tab.0.bottom" timestamp="1600136597947">
+    <state x="805" y="311" key="FileChooserDialogImpl/0.0.2048.1112@0.0.2048.1112" timestamp="1600237357851" />
+    <state width="2005" height="305" key="GridCell.Tab.0.bottom" timestamp="1600240059861">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state width="2005" height="305" key="GridCell.Tab.0.bottom/0.0.2048.1112@0.0.2048.1112" timestamp="1600136597947" />
-    <state width="2005" height="305" key="GridCell.Tab.0.center" timestamp="1600136597947">
+    <state width="2005" height="305" key="GridCell.Tab.0.bottom/0.0.2048.1112@0.0.2048.1112" timestamp="1600240059861" />
+    <state width="2005" height="305" key="GridCell.Tab.0.center" timestamp="1600240059861">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state width="2005" height="305" key="GridCell.Tab.0.center/0.0.2048.1112@0.0.2048.1112" timestamp="1600136597947" />
-    <state width="2005" height="305" key="GridCell.Tab.0.left" timestamp="1600136597947">
+    <state width="2005" height="305" key="GridCell.Tab.0.center/0.0.2048.1112@0.0.2048.1112" timestamp="1600240059861" />
+    <state width="2005" height="305" key="GridCell.Tab.0.left" timestamp="1600240059861">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state width="2005" height="305" key="GridCell.Tab.0.left/0.0.2048.1112@0.0.2048.1112" timestamp="1600136597947" />
-    <state width="2005" height="305" key="GridCell.Tab.0.right" timestamp="1600136597947">
+    <state width="2005" height="305" key="GridCell.Tab.0.left/0.0.2048.1112@0.0.2048.1112" timestamp="1600240059861" />
+    <state width="2005" height="305" key="GridCell.Tab.0.right" timestamp="1600240059861">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state width="2005" height="305" key="GridCell.Tab.0.right/0.0.2048.1112@0.0.2048.1112" timestamp="1600136597947" />
+    <state width="2005" height="305" key="GridCell.Tab.0.right/0.0.2048.1112@0.0.2048.1112" timestamp="1600240059861" />
     <state width="2005" height="376" key="GridCell.Tab.1.bottom" timestamp="1599809000743">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
@@ -161,6 +162,6 @@
     <state x="533" y="201" key="SettingsEditor/0.0.2048.1112@0.0.2048.1112" timestamp="1599804835779" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/DR_Grading$dr_main.coverage" NAME="dr_main Coverage Results" MODIFIED="1600222011287" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/DR_1" />
+    <SUITE FILE_PATH="coverage/DR_Grading$dr_main.coverage" NAME="dr_main Coverage Results" MODIFIED="1600237973575" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/DR_1" />
   </component>
 </project>

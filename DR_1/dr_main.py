@@ -75,7 +75,7 @@ training_set = Dataset(os.path.join(BASE_TRAIN_PATH, 'merged_tr_vl', 'merged_tr_
 train_generator = data.DataLoader(training_set, **params)
 
 
-class LitModel(pl.LightningModule):
+class DRModel(pl.LightningModule):
 
     def __init__(self):
         super().__init__()
@@ -92,10 +92,11 @@ class LitModel(pl.LightningModule):
 
         eye = torch.eye(5).cuda()
         y = eye[y]
-        loss = F.smooth_l1_loss(y_hat, y)
+        metric = pl.metrics.MSE()
+        loss = metric(y_hat, y)
         result = pl.TrainResult(loss)
         # print(loss)
-        result.log('train_loss', loss)
+        result.log('train_loss', loss,prog_bar=True)
         return result
 
     def configure_optimizers(self):
@@ -108,12 +109,12 @@ class LitModel(pl.LightningModule):
         y = eye[y]
         loss = F.smooth_l1_loss(y_hat, y)
         result = pl.EvalResult(loss)
-        result.log('val_loss', loss)
+        result.log('val_loss', loss,prog_bar=True)
         return result
 
 
-trainer = pl.Trainer(gpus=1, limit_test_batches=1.0)
-model = LitModel()
+trainer = pl.Trainer(gpus=1, limit_val_batches=0.1,limit_train_batches=0.1)
+model = DRModel()
 
 kfold = KFold(5, True, 1)
 fold_count = 0
