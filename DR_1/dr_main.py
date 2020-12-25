@@ -3,22 +3,18 @@ import pandas as pd
 import torch
 import torch.nn.functional as F
 import pytorch_lightning as pl
-from pytorch_lightning.callbacks import EarlyStopping
 from torch.utils import data
-from torchvision.datasets import MNIST
 import torchvision
 import torchvision.transforms as transforms
 from efficientnet_pytorch import EfficientNet
 from PIL import Image
-from sklearn.model_selection import KFold
-from torch.utils.data.sampler import SubsetRandomSampler
-from sklearn.metrics import cohen_kappa_score, precision_score, recall_score, f1_score
-from DR_1.pytorchtools import EarlyStopping_kappa
 
-BASE_TRAIN_PATH = 'E:\Dataset\DR\DeepDr'
+from torch.utils.data.sampler import SubsetRandomSampler
+from sklearn.metrics import cohen_kappa_score
+from pytorch_lightning.callbacks import EarlyStopping
+
+BASE_TRAIN_PATH = 'E:\Dataset\DR\DeepDr/Sample_DS'
 ''' Training Dataset Directory '''
-BASE_TEST_PATH = 'E:\Dataset\DR\DeepDr\Onsite-Challenge1-2-Evaluation'
-''' Test Dataset Directory '''
 
 
 class Dataset(data.Dataset):
@@ -57,7 +53,7 @@ class Dataset(data.Dataset):
  Hyper Parameters 
 '''
 
-batch_size = 4
+batch_size = 2
 ''' batch size '''
 params = {'batch_size': batch_size,
           'shuffle': True
@@ -65,34 +61,33 @@ params = {'batch_size': batch_size,
 learning_rate = 1e-4
 ''' The learning rate '''
 
-transform_train = transforms.Compose([transforms.Resize((200, 200)), transforms.RandomApply([
+transform_train = transforms.Compose([transforms.Resize((100, 100)), transforms.RandomApply([
     torchvision.transforms.RandomRotation(30),
     transforms.RandomHorizontalFlip()], 0.7),
                                       transforms.ToTensor()])
+
 ''' Transform Images to specific size and randomly rotate and flip them '''
 
-training_set = Dataset(os.path.join(BASE_TRAIN_PATH, 'merged_tr_vl', 'merged_tr_vl.csv'),
-                       os.path.join(BASE_TRAIN_PATH, 'merged_tr_vl'),
+training_set = Dataset(os.path.join(BASE_TRAIN_PATH, 'sample_ds.csv'),
+                       BASE_TRAIN_PATH,
                        transform=transform_train)
 
 train_generator = data.DataLoader(training_set, **params)
 
-def quadratic_kappa(y_hat, y):
-    return torch.tensor(cohen_kappa_score(torch.argmax(y_hat.cpu(),1), y.cpu(), weights='quadratic'),device='cuda:0')
 
 class DRModel(pl.LightningModule):
 
     def __init__(self):
         super().__init__()
         self.model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=5)
-        self.early_stopping = None
+        self.preds = []
+        self.labels = []
 
-    def set_early_stopping(self, early_stopping):
-        self.early_stopping = early_stopping
+    def quadratic_kappa_cpu(self, y_hat, y):
+        return cohen_kappa_score(y_hat, y, weights='quadratic')
 
     def forward(self, x):
         x = self.model(x)
-        # x = F.log_softmax(x, dim=1)
         return x
 
     def training_step(self, batch, batch_idx):
@@ -115,36 +110,50 @@ class DRModel(pl.LightningModule):
         y_hat = self(x)
         eye = torch.eye(5).cuda()
         yy = eye[y]
+        pred = torch.reshape(y_hat.argmax(dim=1, keepdim=True), (batch_size, 1))
+        self.preds += pred.tolist()
+        self.labels += y.tolist()
+
         loss = F.smooth_l1_loss(y_hat, yy)
-        result = pl.EvalResult(loss)
-        kappa = quadratic_kappa(y_hat, y)
-        # result.log('kappa', kappa, prog_bar=True)
-        return result
+        return {"val_loss": loss}
 
+    def validation_epoch_end(self, outputs):
 
-early_stopping = None
+        loss = sum(x['val_loss'] for x in outputs) / len(outputs)
+
+        qkappa = torch.tensor(self.quadratic_kappa_cpu(self.preds, self.labels))
+
+        print({'val_epoch_qkappa': qkappa.item()})
+        self.preds = []
+        self.labels = []
+        return {'log': {'val_loss': loss, 'val_epoch_qkappa': qkappa}}
 
 model = DRModel()
 
-kfold = KFold(5, True, 1)
-fold_count = 0
-torch.save(model.state_dict(), 'init.pt')
-for fold, (train_index, val_index) in enumerate(kfold.split(training_set)):
-    fold_count += 1
-    print('>>>>>>>Fold ' + str(fold_count))
-    model.load_state_dict(torch.load('init.pt'))
-    train_sampler = SubsetRandomSampler(train_index)
-    valid_sampler = SubsetRandomSampler(val_index)
-    train_loader = torch.utils.data.DataLoader(training_set,
-                                               sampler=train_sampler,
-                                               batch_size=batch_size)
-    val_loader = torch.utils.data.DataLoader(training_set,
-                                             sampler=valid_sampler,
-                                             batch_size=batch_size)
+test_size = int(0.2 * len(training_set))
+indices = list(range(len(training_set)))
+train_indices, val_indices = indices[test_size:], indices[:test_size]
+train_sampler = SubsetRandomSampler(train_indices)
+valid_sampler = SubsetRandomSampler(val_indices)
 
-    early_stopping = EarlyStopping_kappa(patience=5, verbose=True)
-    model.set_early_stopping(early_stopping)
-    ''' Early Stopping '''
+train_loader = torch.utils.data.DataLoader(training_set,
+                                           sampler=train_sampler,
+                                           batch_size=batch_size)
+val_loader = torch.utils.data.DataLoader(training_set,
+                                         sampler=valid_sampler,
+                                         batch_size=batch_size)
 
-    trainer = pl.Trainer(gpus=1, limit_val_batches=0.1, limit_train_batches=0.1)
-    trainer.fit(model, train_loader, val_loader)
+early_stopping = EarlyStopping(
+    monitor='val_loss',
+    min_delta=0.00,
+    patience=3,
+    verbose=False,
+    mode='min'
+)
+
+''' Early Stopping '''
+
+trainer = pl.Trainer(gpus=1,early_stop_callback=early_stopping)
+trainer.fit(model, train_loader, val_loader)
+
+
