@@ -15,9 +15,10 @@ from sklearn.preprocessing import MinMaxScaler
 sc = MinMaxScaler(feature_range=(0,1))
 X = sc.fit_transform(X)
 
-X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.30, shuffle=True, random_state=1000)
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.30, shuffle=True, random_state=1400)
 
-clf = RandomForestClassifier(n_estimators=100)
+
+clf = RandomForestClassifier(n_estimators=95)
 clf.fit(X_train, y_train)
 y_pred = clf.predict(X_test)
 
@@ -25,6 +26,6 @@ y_pred = clf.predict(X_test)
 confusion_matrix = pd.crosstab(y_test, y_pred, rownames=['Actual'], colnames=['Predicted'])
 sn.heatmap(confusion_matrix, annot=True)
 
-print('Accuracy: ', metrics.accuracy_score(y_test, y_pred))
-print('QKappa Score: ', metrics.cohen_kappa_score(y_test,y_pred,weights='quadratic'))
+print(' Accuracy: ', metrics.accuracy_score(y_test, y_pred))
+print(' QKappa Score: ', metrics.cohen_kappa_score(y_test,y_pred,weights='quadratic'))
 plt.show()
