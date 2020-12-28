@@ -1,4 +1,4 @@
-patient_id,image_id,image_path,Overall quality,left_eye_DR_Level,right_eye_DR_Level,patient_DR_Level,Clarity,Field definition,Artifact
+patient_id,image_id,image_path,image_quality,left_eye_DR_Level,right_eye_DR_Level,patient_DR_Level,Clarity,Field definition,Artifact
 1,1_l1,\regular-fundus-training\1\1_l1.jpg,0,0,,0,8,8,4
 1,1_l2,\regular-fundus-training\1\1_l2.jpg,0,0,,0,8,8,0
 1,1_r1,\regular-fundus-training\1\1_r1.jpg,0,,0,0,8,8,4

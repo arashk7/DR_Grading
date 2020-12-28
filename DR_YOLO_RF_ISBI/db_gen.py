@@ -13,9 +13,9 @@ import csv
 # Read Arguments
 parser = argparse.ArgumentParser()
 ''' Input CSV file'''
-parser.add_argument('--in_csv_path', type=str, default='./isbi_tr_vl.csv')
+parser.add_argument('--in_csv_path', type=str, default='./isbi_ts.csv')
 ''' Input Label directory ( Yolo result label directory )'''
-parser.add_argument('--in_label_dir', type=str, default='./labels_isbi')
+parser.add_argument('--in_label_dir', type=str, default='./labels_isbi_test')
 
 arg = parser.parse_args()
 ''' Process all the input arguments '''
@@ -30,14 +30,14 @@ main_db = pd.read_csv(in_csv_path, keep_default_na=False)
 # image_urls = main_db['image_url']
 
 ''' Opening the csv file in 'w' mode '''
-file = open('arash_yolo_isbi.csv', 'w', newline='')
+file = open('arash_yolo_isbi_ts.csv', 'w', newline='')
 # with file:
 # identifying header
 file.header = ['img_name', 'dr', 'level', 'bl_num', 'bl_size', 'he_num', 'he_size', 'laser_num', 'laser_size']
 file.writer = csv.DictWriter(file, fieldnames=file.header)
 file.writer.writeheader()
 
-for i in range(len(main_db['image_path'])):
+for i in range(len(main_db['image_id'])):
     name = main_db['image_id'][i]
     l_name = name + '.txt'
     path = os.path.join(in_label_dir, l_name)
@@ -65,7 +65,7 @@ for i in range(len(main_db['image_path'])):
 
         print(bl_co)
         print(bl_size * 50)
-        quality = int(main_db['Overall quality'][i])
+        quality = int(main_db['image_quality'][i])
         left = main_db['left_eye_DR_Level'][i]
         right = main_db['right_eye_DR_Level'][i]
         '''check eye side (left or right)'''

@@ -1,2 +1,3 @@
 DR_YOLO_RF_ISBI/labels_isbi
+DR_YOLO_RF_ISBI/labels_isbi_test
 *.pt
