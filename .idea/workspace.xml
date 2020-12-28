@@ -45,7 +45,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/DR_Yolo_RF" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../zhitang_dataset_generator" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -130,6 +130,8 @@
       <workItem from="1606197636784" duration="7759000" />
       <workItem from="1606285589941" duration="143000" />
       <workItem from="1608876372866" duration="1824000" />
+      <workItem from="1608882579139" duration="468000" />
+      <workItem from="1609118433789" duration="1616000" />
     </task>
     <servers />
   </component>
@@ -149,10 +151,10 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="805" y="311" key="FileChooserDialogImpl" timestamp="1606285730685">
+    <state x="805" y="311" key="FileChooserDialogImpl" timestamp="1609119774488">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state x="805" y="311" key="FileChooserDialogImpl/0.0.2048.1112@0.0.2048.1112" timestamp="1606285730685" />
+    <state x="805" y="311" key="FileChooserDialogImpl/0.0.2048.1112@0.0.2048.1112" timestamp="1609119774488" />
     <state width="2005" height="305" key="GridCell.Tab.0.bottom" timestamp="1608878197612">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
