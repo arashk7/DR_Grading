@@ -5,6 +5,9 @@ import seaborn as sn
 import matplotlib.pyplot as plt
 from sklearn import metrics
 
+from flask import Flask
+app = Flask(__name__)
+
 features = pd.read_csv('../arash_yolo_isbi_ts.csv')
 features.head()
 
@@ -28,3 +31,10 @@ sn.heatmap(confusion_matrix, annot=True)
 print(' Accuracy: ', metrics.accuracy_score(y_test, y_pred))
 print(' QKappa Score: ', metrics.cohen_kappa_score(y_test, y_pred, weights='quadratic'))
 plt.show()
+
+
+@app.route('/')
+def hello_world():
+    # return 'Hello, World!'
+    return ' Accuracy: '+ str(metrics.accuracy_score(y_test, y_pred))
+    # print(' QKappa Score: ', metrics.cohen_kappa_score(y_test, y_pred, weights='quadratic'))
