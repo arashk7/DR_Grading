@@ -5,11 +5,16 @@ import seaborn as sn
 import matplotlib.pyplot as plt
 from sklearn import metrics
 
+from flask import Flask
+from flask_restful import Api, Resource
+app = Flask(__name__)
+api = Api(app)
+
 features = pd.read_csv('../arash_yolo_isbi_ts.csv')
 features.head()
 
 X = features[['bl_num', 'bl_size', 'he_num', 'he_size', 'laser_num', 'laser_size']].astype(float)
-Y = features['dr'].astype(int)
+Y = features['level'].astype(int)
 
 from sklearn.preprocessing import MinMaxScaler
 
@@ -25,7 +30,20 @@ y_pred = clf.predict(X_test)
 confusion_matrix = pd.crosstab(y_test, y_pred, rownames=['Actual'], colnames=['Predicted'])
 sn.heatmap(confusion_matrix, annot=True)
 
-print(' Accuracy: ', metrics.accuracy_score(y_test, y_pred))
-print(' QKappa Score: ', metrics.cohen_kappa_score(y_test, y_pred, weights='quadratic'))
-plt.show()
+# print(' Accuracy: ', metrics.accuracy_score(y_test, y_pred))
+# print(' QKappa Score: ', metrics.cohen_kappa_score(y_test, y_pred, weights='quadratic'))
+# plt.show()
 
+
+class hello(Resource):
+    def get(self):
+        clf = RandomForestClassifier(n_estimators=95)
+        clf.fit(X_train, y_train)
+        y_pred = clf.predict(X_test)
+        acc=metrics.accuracy_score(y_test, y_pred)
+        return {'accuracy': str(acc)}
+
+api.add_resource(hello,'/hello')
+
+if __name__ == "__main__":
+	app.run(debug=True)
