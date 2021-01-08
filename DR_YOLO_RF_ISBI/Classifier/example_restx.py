@@ -1,7 +1,6 @@
 from flask import Flask
 from flask_restx import Api, Resource, reqparse, fields
 from werkzeug.datastructures import FileStorage
-from PIL import Image
 
 app = Flask(__name__)
 api = Api(app)
@@ -17,9 +16,7 @@ class Upload(Resource):
     def post(self):
         args = upload_parser.parse_args()
         uploaded_file = args['file']  # This is FileStorage instance
-        img = Image.open(uploaded_file)
-        url = img.size()
-
+        url = uploaded_file
         return {'url': url}, 201
 
 
